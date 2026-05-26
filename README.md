@@ -42,4 +42,18 @@ I expect to create a script that will predict the classification of parcels.
 
    No.
 
+### Feature Engineering Reflection
+
+5. Why can geometry not be used directly in ML?
+
+   It is hart to use geometry directly in ML because it is just coordinates with no context.
+
+6. Why are distances meaningful features?
+
+   It provides context on what is in the proximity of the parcels.Everything is related to everything else, but near things are more related than distant things.
+
+7. Which feature do you think is most influential?
+
+   I think land use is the most infuential since it dictates what structures can be built on the parcel.
+
 ---
