@@ -56,4 +56,18 @@ I expect to create a script that will predict the classification of parcels.
 
    I think land use is the most infuential since it dictates what structures can be built on the parcel.
 
+### Model Reflection
+
+8. What does accuracy mean spatially?
+
+   Since the script is predicting on the parcel ASS_CLASSI it is not predicting a spatial feature therefore accuracy is not directly related to spatial feature. Spatial features has indirect relation to accuracy since the input columns used in the ML model are generated from spatial relationship between the parcel and the feature.
+
+9. Can a model have high accuracy but poor spatial interpretation?
+
+   Yes.
+
+10. What features may improve the model?
+
+Data on zoning can improve the accuracy of the model.
+
 ---
