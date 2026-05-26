@@ -1,8 +1,12 @@
 import geopandas as gpd
+import numpy as np
 
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score
+
 
 
 
@@ -53,6 +57,24 @@ parcels["dist_to_tourism"] = parcels["centroid"].apply(
     lambda p: tourism.distance(p).min()
 )
 
+
+# -------------------------
+# New features
+# -------------------------
+
+# School count within 500m
+parcels_buffer = parcels.copy()
+parcels_buffer["geometry"] = parcels.geometry.buffer(500)
+schools_joined = gpd.sjoin(parcels_buffer, schools, how="left", predicate="intersects")
+parcels["school_count"] = schools_joined.groupby(schools_joined.index)['index_right'].count()
+
+# Tourism Density
+tourism_joined = gpd.sjoin(parcels_buffer, tourism, how="left", predicate="intersects")
+tourism_counts = tourism_joined.groupby(tourism_joined.index)['index_right'].count()
+buffer_area_sq_km = (np.pi * (500 ** 2)) / 1_000_000
+parcels["tourism_density"] = tourism_counts / buffer_area_sq_km
+
+
 # spatial join with land use
 parcels_landuse = gpd.sjoin(
     parcels,
@@ -96,7 +118,9 @@ features = [
     "dist_to_water",
     "dist_to_school",
     "dist_to_tourism",
-    "landuse_code"
+    "landuse_code",
+    "school_count",
+    "tourism_density"
 ]
 
 data = parcels_landuse.dropna(
@@ -106,19 +130,24 @@ data = parcels_landuse.dropna(
 X = data[features]
 y = data["target_code"]
 
+# Scale features so they have equal weight in distance calculations
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
 
 
 X_train, X_test, y_train, y_test = train_test_split(
-    X,
+    # X,
+    X_scaled,
     y,
     test_size=0.30,
     random_state=42
 )
 
-model = RandomForestClassifier(
-    n_estimators=100,
-    random_state=42
-)
+# model = RandomForestClassifier(
+#     n_estimators=100,
+#     random_state=42
+# )
+model = KNeighborsClassifier(n_neighbors=5)
 
 model.fit(X_train, y_train)
 
@@ -147,15 +176,15 @@ data["correct_prediction"] = (
     data["predicted_label"]
 )
 
-print(
-    data[
-        [
-            "ASS_CLASSI",
-            "predicted_label",
-            "correct_prediction"
-        ]
-    ].head()
-)
+# print(
+#     data[
+#         [
+#             "ASS_CLASSI",
+#             "predicted_label",
+#             "correct_prediction"
+#         ]
+#     ].head()
+# )
 
 
 data = data.drop(
@@ -165,7 +194,7 @@ data = data.drop(
 
 # export to geojson
 data.to_file(
-    "output/parcel_geoai_prediction.geojson",
+    "output/parcel_geoai_prediction_knn_2_new_feature.geojson",
     driver="GeoJSON"
 )
 print("GeoAI output exported.")

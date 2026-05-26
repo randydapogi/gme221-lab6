@@ -20,6 +20,15 @@ I expect to create a script that will predict the classification of parcels.
 
 ## Outputs
 
+| Model |    Features    | Accuracy |
+| :---- | :------------: | -------: |
+| RF    |    Default     |    96.13 |
+| RF    | 2 New Features |    96.34 |
+| KNN   |    Default     |    94.77 |
+| KNN   | 2 New Features |    94.76 |
+
+I generated 4 predictions with the parameters and accuracies above. Based on my observation RF with 2 additional features produced the best accuracy. On the other hand KNN models, both the default and the one with 2 new features have bad accuracy compared to RF.
+
 ---
 
 ## Reflection
@@ -73,5 +82,27 @@ I expect to create a script that will predict the classification of parcels.
 ### Spatial Misclassification
 
     Based on the printed result an Agricultural(A) ASS_CLASSI was tagged as Residential(R)
+
+### Final Reflection Questions
+
+11. How is GeoAI different from traditional GIS analysis?
+
+    Traditional GIS is easier to follow on the other hand GeoAI is more of a black box where we dont really understand how the model created relationships between the features to predict the output.
+
+12. What spatial features most influenced the model?
+
+    Based on my testing removing dist_to_school as feature decreased the accuracy the most therefore it has the most influence to the accuracy.
+
+13. What are the limitations of this model?
+
+    Since the prediction result is dependent on the features provided, the accuracy of the prediction is influenced the proper feature selection by the user.
+
+14. How can this support spatial decision-making?
+
+    GeoAI is useful in finding patterns that are not easily noticible by humans. GeoAI can help decision makers see spatial patterns.
+
+15. What ethical or planning concerns may arise from predictive parcel classification?
+
+    One thing to consider when using GeoAI for predicting parcels is who is accountable for the results. In traditional GIS, the GIS specialist processing the data is accountable to the result however in GeoAI no one is accountable. That is why it is advisable that results from GeoAI is still reviewed by human experts before being used as inputs by decision makers.
 
 ---
