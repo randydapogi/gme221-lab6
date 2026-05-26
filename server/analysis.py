@@ -128,3 +128,31 @@ y_pred = model.predict(X_test)
 
 accuracy = accuracy_score(y_test, y_pred)
 print("Accuracy:", accuracy)
+
+
+data["predicted_class"] = model.predict(X)
+
+categories = (
+    data["ASS_CLASSI"]
+    .astype("category")
+    .cat.categories
+)
+
+data["predicted_label"] = data["predicted_class"].apply(
+    lambda code: categories[code]
+)
+
+data["correct_prediction"] = (
+    data["ASS_CLASSI"] ==
+    data["predicted_label"]
+)
+
+print(
+    data[
+        [
+            "ASS_CLASSI",
+            "predicted_label",
+            "correct_prediction"
+        ]
+    ].head()
+)

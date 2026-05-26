@@ -68,6 +68,10 @@ I expect to create a script that will predict the classification of parcels.
 
 10. What features may improve the model?
 
-Data on zoning can improve the accuracy of the model.
+    Data on zoning can improve the accuracy of the model.
+
+### Spatial Misclassification
+
+    Based on the printed result an Agricultural(A) ASS_CLASSI was tagged as Residential(R)
 
 ---
